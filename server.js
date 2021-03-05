@@ -11,6 +11,12 @@ app.get('/', (req, res) => {
   res.send('Testing...');
 });
 
+app.get('/video-info/:videoid', (req, res) => {
+  res.json(
+    { video_id: req.params.videoid },
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`Example app listening at http://localhost:${PORT}`);
 });
