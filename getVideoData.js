@@ -15,13 +15,16 @@ const getVideoData = (req, res) => {
       const videoUrlInTikTokApi = TIKTOK_API + redirectedUrl;
       https.get(videoUrlInTikTokApi, (response) => {
         response.on('data', (chunk) => {
-          const tikTokData = JSON.parse(chunk);
-          callback(null, tikTokData);
+          const tiktokData = JSON.parse(chunk);
+          callback(null, tiktokData);
         });
       });
     },
     function addTikTokData(tiktokData, callback) {
       const videoData = {};
+      videoData.title = tiktokData.title;
+      videoData.author_url = tiktokData.author_url;
+      videoData.author_name = tiktokData.author_name;
       callback(null, videoData);
     },
     function displayVideoData(videoData) {
