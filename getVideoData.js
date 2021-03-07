@@ -10,21 +10,19 @@ const getVideoData = (req, res) => {
         callback(null, redirectedUrl);
       });
     },
-    function addRedirectedUrlToVideoData(redirectedUrl, callback) {
-      const videoData = [{
-        video_url: redirectedUrl,
-      }];
-      callback(null, videoData[0]);
-    },
-    function getTikTokData(videoData, callback) {
+    function getTikTokData(redirectedUrl, callback) {
       const TIKTOK_API = 'https://www.tiktok.com/oembed?url=';
-      const videoUrlInTikTokApi = TIKTOK_API + videoData.video_url;
+      const videoUrlInTikTokApi = TIKTOK_API + redirectedUrl;
       https.get(videoUrlInTikTokApi, (response) => {
         response.on('data', (chunk) => {
           const tikTokData = JSON.parse(chunk);
-          callback(null, videoData, tikTokData);
+          callback(null, tikTokData);
         });
       });
+    },
+    function addTikTokData(tiktokData, callback) {
+      const videoData = {};
+      callback(null, videoData);
     },
     function displayVideoData(videoData) {
       res.json(videoData);
