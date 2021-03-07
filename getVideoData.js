@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import https from 'follow-redirects/https';
 import async from 'async';
 
@@ -10,18 +11,22 @@ const getVideoData = (req, res) => {
         callback(null, redirectedUrl);
       });
     },
-    function getTikTokData(redirectedUrl, callback) {
+    function addRedirectedUrlToVideoData(redirectedUrl, callback) {
+      const videoData = {};
+      videoData.video_url = redirectedUrl;
+      callback(null, videoData);
+    },
+    function getTikTokData(videoData, callback) {
       const TIKTOK_API = 'https://www.tiktok.com/oembed?url=';
-      const videoUrlInTikTokApi = TIKTOK_API + redirectedUrl;
+      const videoUrlInTikTokApi = TIKTOK_API + videoData.video_url;
       https.get(videoUrlInTikTokApi, (response) => {
         response.on('data', (chunk) => {
           const tiktokData = JSON.parse(chunk);
-          callback(null, tiktokData);
+          callback(null, videoData, tiktokData);
         });
       });
     },
-    function addTikTokData(tiktokData, callback) {
-      const videoData = {};
+    function addTikTokDataToVideoData(videoData, tiktokData, callback) {
       videoData.title = tiktokData.title;
       videoData.author_url = tiktokData.author_url;
       videoData.author_name = tiktokData.author_name;
