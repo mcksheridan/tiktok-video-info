@@ -10,8 +10,14 @@ const getVideoData = (req, res) => {
         callback(null, redirectedUrl);
       });
     },
-    function sendRedirectedUrlToBrowser(redirectedUrl) {
-      res.send(redirectedUrl);
+    function addRedirectedUrlToVideoData(redirectedUrl, callback) {
+      const videoData = [{
+        video_url: redirectedUrl,
+      }];
+      callback(null, videoData);
+    },
+    function displayVideoData(videoData) {
+      res.json(videoData);
     },
   ]);
 };
