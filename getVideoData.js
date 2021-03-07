@@ -14,7 +14,17 @@ const getVideoData = (req, res) => {
       const videoData = [{
         video_url: redirectedUrl,
       }];
-      callback(null, videoData);
+      callback(null, videoData[0]);
+    },
+    function getTikTokData(videoData, callback) {
+      const TIKTOK_API = 'https://www.tiktok.com/oembed?url=';
+      const videoUrlInTikTokApi = TIKTOK_API + videoData.video_url;
+      https.get(videoUrlInTikTokApi, (response) => {
+        response.on('data', (chunk) => {
+          const tikTokData = JSON.parse(chunk);
+          callback(null, videoData, tikTokData);
+        });
+      });
     },
     function displayVideoData(videoData) {
       res.json(videoData);
