@@ -132,5 +132,3 @@ export const getVideoData = (req, res) => {
     },
   ]);
 };
-
-// export { getVideoData as default };
