@@ -2,6 +2,14 @@
 import https from 'follow-redirects/https';
 import async from 'async';
 
+const addHtmlToEndOfUrl = (url) => {
+  if (url.endsWith('html')) {
+    return url;
+  }
+  const urlEndingWithHtml = `${url}.html`;
+  return urlEndingWithHtml;
+};
+
 const getVideoData = (req, res) => {
   const userInputVideoUrl = req.query.url;
   async.waterfall([
@@ -11,9 +19,22 @@ const getVideoData = (req, res) => {
         callback(null, redirectedUrl);
       });
     },
-    function addRedirectedUrlToVideoData(redirectedUrl, callback) {
+    function checkForMobileWebUrls(redirectedUrl, callback) {
+      // URLs beginning with 'm' (i.e. https://m.tiktok.com/foo) receive a status code of 200.
+      // As they do not have a redirect status code, follow redirects will return the input URL.
+      // However, these URLs can not be used with the TikTok API (i.e. https://tiktok.com/oembed?url=bar)
+      const mobileWebPattern = 'm.tiktok.com/v';
+      if (userInputVideoUrl.includes(mobileWebPattern)) {
+        const urlToExtractDataFrom = addHtmlToEndOfUrl(userInputVideoUrl);
+        callback(null, urlToExtractDataFrom);
+      } else {
+        const urlToExtractDataFrom = redirectedUrl;
+        callback(null, urlToExtractDataFrom);
+      }
+    },
+    function addRedirectedUrlToVideoData(urlToExtractDataFrom, callback) {
       const videoData = {};
-      videoData.video_url = redirectedUrl;
+      videoData.video_url = urlToExtractDataFrom;
       callback(null, videoData);
     },
     function getTikTokData(videoData, callback) {
