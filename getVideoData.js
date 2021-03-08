@@ -1,6 +1,7 @@
 /* eslint-disable no-param-reassign */
 import https from 'follow-redirects/https';
 import async from 'async';
+import BigNumber from 'big-number';
 
 export const addHtmlToEndOfUrl = (url) => {
   if (url.endsWith('html')) {
@@ -80,6 +81,47 @@ export const getVideoData = (req, res) => {
     function saveTikTokId(videoData, tiktokId, callback) {
       videoData.video_id = tiktokId;
       callback(null, videoData);
+    },
+    function getBinaryId(videoData, callback) {
+      const tiktokIdBigIntBinaryArray = [];
+      const tiktokIdInteger = BigNumber(videoData.video_id);
+      let currentInteger = tiktokIdInteger;
+      while (currentInteger > BigNumber(0)) {
+        const remainder = BigNumber(currentInteger).mod(2);
+        const remainderString = remainder.toString();
+        tiktokIdBigIntBinaryArray.unshift(remainderString);
+        currentInteger = BigNumber(currentInteger).div(2);
+        if (currentInteger == 0) {
+          const currentIntegerString = currentInteger.toString();
+          tiktokIdBigIntBinaryArray.unshift(currentIntegerString);
+        }
+      }
+      callback(null, videoData, tiktokIdBigIntBinaryArray);
+    },
+    function getThirtyTwoLeftBits(videoData, tiktokIdBigIntBinaryArray, callback) {
+      const tiktokIdBinaryArray = tiktokIdBigIntBinaryArray.map((number) => parseInt(number));
+      const tiktokIdBinaryString = tiktokIdBinaryArray.join('');
+      const thirtyTwoLeftBits = tiktokIdBinaryString.slice(0, 32);
+      callback(null, videoData, thirtyTwoLeftBits);
+    },
+    function getDecimalFromBits(videoData, thirtyTwoLeftBits, callback) {
+      const decimalArray = [];
+      let arrayPlace = 0;
+      let previousValue = 0;
+      while (arrayPlace < 32) {
+        const valueTotal = previousValue * 2;
+        const bitAsInteger = parseInt(thirtyTwoLeftBits[arrayPlace]);
+        const newTotal = bitAsInteger + valueTotal;
+        decimalArray[0] = newTotal;
+        previousValue = newTotal;
+        arrayPlace += 1;
+      }
+      const decimal = decimalArray.toString();
+      callback(null, videoData, decimal);
+    },
+    function getDateAdded(videoData, decimal, callback) {
+      const dateAdded = new Date(decimal * 1000);
+      callback(null, videoData, dateAdded);
     },
     function displayVideoData(videoData) {
       res.json(videoData);
