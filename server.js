@@ -14,6 +14,4 @@ app.get('/', (req, res) => {
 
 app.get('/video-info', getVideoData);
 
-app.listen(PORT, () => {
-  // console.log(`Example app listening at http://localhost:${PORT}`);
-});
+app.listen(PORT);
