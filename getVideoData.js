@@ -47,6 +47,14 @@ const getVideoData = (req, res) => {
         });
       });
     },
+    function checkTikTokDataValidity(videoData, tiktokData, callback) {
+      // TikTok can return a 200 response even when the video does not exist.
+      if (tiktokData.title === undefined) {
+        res.json(videoData);
+      } else {
+        callback(null, videoData, tiktokData);
+      }
+    },
     function saveTikTokData(videoData, tiktokData, callback) {
       videoData.title = tiktokData.title;
       videoData.author_url = tiktokData.author_url;
