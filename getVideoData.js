@@ -61,6 +61,26 @@ const getVideoData = (req, res) => {
       videoData.author_name = tiktokData.author_name;
       callback(null, videoData);
     },
+    function getTikTokId(videoData, callback) {
+      const idRegexPattern = new RegExp(/\d+/);
+      if (videoData.video_url.startsWith('https://m')) {
+        const tiktokIdArray = videoData.video_url.match(idRegexPattern);
+        const tiktokId = tiktokIdArray[0];
+        callback(null, videoData, tiktokId);
+      }
+      if (videoData.video_url.startsWith('https://www')) {
+        const videoRegexPattern = new RegExp(/video\/\d+/);
+        const tiktokVideoPattern = videoData.video_url.match(videoRegexPattern);
+        const tiktokVideoString = tiktokVideoPattern.toString();
+        const tiktokIdArray = tiktokVideoString.match(idRegexPattern);
+        const tiktokId = tiktokIdArray[0];
+        callback(null, videoData, tiktokId);
+      }
+    },
+    function saveTikTokId(videoData, tiktokId, callback) {
+      videoData.video_id = tiktokId;
+      callback(null, videoData);
+    },
     function displayVideoData(videoData) {
       res.json(videoData);
     },
