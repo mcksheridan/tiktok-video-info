@@ -21,10 +21,15 @@ export const getVideoData = (req, res) => {
   redirectBlankQuery();
   async.waterfall([
     function getRedirectedUrl(callback) {
-      https.get(userInputVideoUrl, (response) => {
-        const redirectedUrl = response.responseUrl;
-        callback(null, redirectedUrl);
-      });
+      try {
+        https.get(userInputVideoUrl, (response) => {
+          const redirectedUrl = response.responseUrl;
+          callback(null, redirectedUrl);
+        })
+      } catch(error) {
+        console.error(error);
+        res.status(500).send('There was a problem with the URL request');
+      }
     },
     function checkForMobileWebUrls(redirectedUrl, callback) {
       // URLs beginning with 'm' (i.e. https://m.tiktok.com/foo) receive a status code of 200.
