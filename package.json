@@ -1,7 +1,7 @@
 {
   "name": "tiktok-video-info",
   "version": "1.0.0",
-  "description": "API to request additional information about TikTok videos",
+  "description": "API supplementing the TikTok API with date added information",
   "main": "index.js",
   "scripts": {
     "test": "jest",
