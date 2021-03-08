@@ -32,7 +32,7 @@ const getVideoData = (req, res) => {
         callback(null, urlToExtractDataFrom);
       }
     },
-    function addRedirectedUrlToVideoData(urlToExtractDataFrom, callback) {
+    function saveRedirectedUrl(urlToExtractDataFrom, callback) {
       const videoData = {};
       videoData.video_url = urlToExtractDataFrom;
       callback(null, videoData);
@@ -47,7 +47,7 @@ const getVideoData = (req, res) => {
         });
       });
     },
-    function addTikTokDataToVideoData(videoData, tiktokData, callback) {
+    function saveTikTokData(videoData, tiktokData, callback) {
       videoData.title = tiktokData.title;
       videoData.author_url = tiktokData.author_url;
       videoData.author_name = tiktokData.author_name;
