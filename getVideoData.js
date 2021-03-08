@@ -123,6 +123,10 @@ export const getVideoData = (req, res) => {
       const dateAdded = new Date(decimal * 1000);
       callback(null, videoData, dateAdded);
     },
+    function saveDateAdded(videoData, dateAdded, callback) {
+      videoData.date_added = dateAdded;
+      callback(null, videoData);
+    },
     function displayVideoData(videoData) {
       res.json(videoData);
     },
