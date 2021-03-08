@@ -8,10 +8,6 @@ const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, 'src/css')));
 
-app.get('/', (req, res) => {
-  res.send('Testing...');
-});
-
-app.get('/video-info', getVideoData);
+app.get('/', getVideoData);
 
 app.listen(PORT);
