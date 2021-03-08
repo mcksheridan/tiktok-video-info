@@ -15,7 +15,7 @@ export const getVideoData = (req, res) => {
   const userInputVideoUrl = req.query.url;
   const redirectBlankQuery = () => {
     if (userInputVideoUrl === undefined) {
-      res.json('Please enter a URL');
+      return res.json('Please enter a URL');
     }
   };
   redirectBlankQuery();
@@ -28,12 +28,12 @@ export const getVideoData = (req, res) => {
         }).on('error', (error) => {
           // eslint-disable-next-line no-console
           console.error(error);
-          res.status(500).json('There was a problem with the URL request');
+          return res.status(500).json('There was a problem with the URL request');
         });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
-        res.status(500).json('There was a problem with the URL you entered');
+        return res.status(500).json('There was a problem with the URL you entered');
       }
     },
     function checkForMobileWebUrls(redirectedUrl, callback) {
