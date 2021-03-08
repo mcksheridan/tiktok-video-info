@@ -2,7 +2,7 @@
 import https from 'follow-redirects/https';
 import async from 'async';
 
-const addHtmlToEndOfUrl = (url) => {
+export const addHtmlToEndOfUrl = (url) => {
   if (url.endsWith('html')) {
     return url;
   }
@@ -10,7 +10,7 @@ const addHtmlToEndOfUrl = (url) => {
   return urlEndingWithHtml;
 };
 
-const getVideoData = (req, res) => {
+export const getVideoData = (req, res) => {
   const userInputVideoUrl = req.query.url;
   async.waterfall([
     function getRedirectedUrl(callback) {
@@ -87,4 +87,4 @@ const getVideoData = (req, res) => {
   ]);
 };
 
-export { getVideoData as default };
+// export { getVideoData as default };

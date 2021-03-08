@@ -4,7 +4,7 @@
   "description": "API to request additional information about TikTok videos",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start": "nodemon --exec babel-node server.js"
   },
   "author": "Sheridan McKisick",
@@ -13,6 +13,11 @@
     "presets": [
       "@babel/preset-env"
     ]
+  },
+  "eslintConfig": {
+    "env": {
+      "jest": true
+    }
   },
   "dependencies": {
     "async": "^3.2.0",
