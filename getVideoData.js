@@ -25,11 +25,15 @@ export const getVideoData = (req, res) => {
         https.get(userInputVideoUrl, (response) => {
           const redirectedUrl = response.responseUrl;
           callback(null, redirectedUrl);
+        }).on('error', (error) => {
+          // eslint-disable-next-line no-console
+          console.error(error);
+          res.status(500).send('There was a problem with the URL request');
         });
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error);
-        res.status(500).send('There was a problem with the URL request');
+        res.status(500).send('There was a problem with the URL you entered');
       }
     },
     function checkForMobileWebUrls(redirectedUrl, callback) {
