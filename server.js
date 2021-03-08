@@ -7,4 +7,4 @@ const PORT = 3000;
 
 app.get('/', getVideoData);
 
-app.listen(PORT);
+app.listen(process.env.PORT || PORT);
