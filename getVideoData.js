@@ -13,6 +13,12 @@ export const addHtmlToEndOfUrl = (url) => {
 
 export const getVideoData = (req, res) => {
   const userInputVideoUrl = req.query.url;
+  const redirectBlankQuery = () => {
+    if (userInputVideoUrl === undefined) {
+      res.send('Please enter a URL');
+    }
+  };
+  redirectBlankQuery();
   async.waterfall([
     function getRedirectedUrl(callback) {
       https.get(userInputVideoUrl, (response) => {
