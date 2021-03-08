@@ -25,8 +25,9 @@ export const getVideoData = (req, res) => {
         https.get(userInputVideoUrl, (response) => {
           const redirectedUrl = response.responseUrl;
           callback(null, redirectedUrl);
-        })
-      } catch(error) {
+        });
+      } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
         res.status(500).send('There was a problem with the URL request');
       }
@@ -102,6 +103,7 @@ export const getVideoData = (req, res) => {
         const remainderString = remainder.toString();
         tiktokIdBigIntBinaryArray.unshift(remainderString);
         currentInteger = BigNumber(currentInteger).div(2);
+        // eslint-disable-next-line eqeqeq
         if (currentInteger == 0) {
           const currentIntegerString = currentInteger.toString();
           tiktokIdBigIntBinaryArray.unshift(currentIntegerString);
@@ -110,7 +112,7 @@ export const getVideoData = (req, res) => {
       callback(null, videoData, tiktokIdBigIntBinaryArray);
     },
     function getThirtyTwoLeftBits(videoData, tiktokIdBigIntBinaryArray, callback) {
-      const tiktokIdBinaryArray = tiktokIdBigIntBinaryArray.map((number) => parseInt(number));
+      const tiktokIdBinaryArray = tiktokIdBigIntBinaryArray.map((number) => parseInt(number, 10));
       const tiktokIdBinaryString = tiktokIdBinaryArray.join('');
       const thirtyTwoLeftBits = tiktokIdBinaryString.slice(0, 32);
       callback(null, videoData, thirtyTwoLeftBits);
@@ -121,7 +123,7 @@ export const getVideoData = (req, res) => {
       let previousValue = 0;
       while (arrayPlace < 32) {
         const valueTotal = previousValue * 2;
-        const bitAsInteger = parseInt(thirtyTwoLeftBits[arrayPlace]);
+        const bitAsInteger = parseInt(thirtyTwoLeftBits[arrayPlace], 10);
         const newTotal = bitAsInteger + valueTotal;
         decimalArray[0] = newTotal;
         previousValue = newTotal;

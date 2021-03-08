@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import { addHtmlToEndOfUrl } from './getVideoData';
 
 describe('URLs from the mobile web platform should be concatenated with .html', () => {
